@@ -6,7 +6,7 @@ struct AddCardsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(.background)
+                Color(.background1)
                     .edgesIgnoringSafeArea(.all)
 
                 VStack {
@@ -49,8 +49,7 @@ struct AddCardsView: View {
             }
             .sheet(isPresented: $viewModel.isSheetPresented) {
                 CreateCardView()
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.large])
             }
         }
     }

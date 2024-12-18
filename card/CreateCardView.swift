@@ -36,7 +36,8 @@ struct CreateCardView: View {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color.clear.opacity(0.1))
                 
-                TextEditor(text: $viewModel.inputText)
+                TextField("Typing...", text: $viewModel.inputText)
+               
                     .font(.system(size: 22))
                     .foregroundColor(.black)
                     .padding(.horizontal, 8)
@@ -78,6 +79,7 @@ struct CreateCardView: View {
                 }
                 
                 Spacer()
+                
             }
             .padding(.bottom, 32)
         }

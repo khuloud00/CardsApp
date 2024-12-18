@@ -39,7 +39,9 @@ struct InstantCardView: View {
                         .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
 
                     VStack {
-                        TextEditor(text: $viewModel.text) // ربط النص مع الـ ViewModel
+                        
+                        TextField("Enter Text ...", text: $viewModel.text, axis: .vertical)
+                       // ربط النص مع الـ ViewModel
                             .padding()
                             .font(.body)
                             .foregroundColor(.gray)
@@ -70,7 +72,7 @@ struct InstantCardView: View {
 
                 Spacer()
             }
-            .background(Color("Background"))
+            .background(Color("Background1"))
             .navigationBarBackButtonHidden(true)
             // التنقل إلى AddCardsView
             .navigationDestination(isPresented: $navigateToAddCardsView) {
