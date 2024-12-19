@@ -16,6 +16,21 @@
 			path = card;
 			sourceTree = "<group>";
 		};
+		725B11E32D137228009341EE /* View */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = View;
+			sourceTree = "<group>";
+		};
+		725B11E42D13725D009341EE /* ViewModel */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		725B11FC2D137571009341EE /* Model */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Model;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +47,9 @@
 		46332A442D0F1B13001321D5 = {
 			isa = PBXGroup;
 			children = (
+				725B11FC2D137571009341EE /* Model */,
+				725B11E42D13725D009341EE /* ViewModel */,
+				725B11E32D137228009341EE /* View */,
 				46332A4F2D0F1B13001321D5 /* card */,
 				46332A4E2D0F1B13001321D5 /* Products */,
 			);
@@ -62,6 +80,9 @@
 			);
 			fileSystemSynchronizedGroups = (
 				46332A4F2D0F1B13001321D5 /* card */,
+				725B11E32D137228009341EE /* View */,
+				725B11E42D13725D009341EE /* ViewModel */,
+				725B11FC2D137571009341EE /* Model */,
 			);
 			name = card;
 			packageProductDependencies = (

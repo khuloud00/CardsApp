@@ -1,8 +1,12 @@
 import SwiftUI
+import Foundation
+import SwiftUI
+import AVFoundation
 
 struct InstantCardView: View {
-    @StateObject private var viewModel = InstantCardViewModel() // ربط الـ ViewModel
-    @State private var navigateToAddCardsView: Bool = false // حالة التنقل
+    @StateObject private var InstantCardViewModel = Viewmodel()
+    @State private var navigateToAddCardsView: Bool = false
+    @State private var text: String = ""
     
     var body: some View {
         NavigationStack {
@@ -11,8 +15,10 @@ struct InstantCardView: View {
                     Text("Instant card")
                         .font(.largeTitle)
                         .fontWeight(.bold)
+                        .foregroundColor(Color.black)
                         .padding(.leading)
                         .padding(.top, 50)
+                        
                     
                     Spacer()
 
@@ -40,8 +46,7 @@ struct InstantCardView: View {
 
                     VStack {
                         
-                        TextField("Enter Text ...", text: $viewModel.text, axis: .vertical)
-                       // ربط النص مع الـ ViewModel
+                        TextField("Enter Text ...", text: $text, axis: .horizontal)
                             .padding()
                             .font(.body)
                             .foregroundColor(.gray)
@@ -55,7 +60,7 @@ struct InstantCardView: View {
                             Spacer()
 
                             Button(action: {
-                                viewModel.speakText() // استدعاء الدالة من ViewModel
+                                InstantCardViewModel.speakText()
                             }) {
                                 Image(systemName: "speaker.wave.3.fill")
                                     .resizable()
