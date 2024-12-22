@@ -28,6 +28,7 @@ class Viewmodel: ObservableObject {
 // ViewModel for Create Card
 
     // بيانات الإدخال
+    @Published var isActive = false
     @Published var inputText: String = ""
     
     // الأزرار المحددة
@@ -55,7 +56,7 @@ class Viewmodel: ObservableObject {
     // متغيرات مرتبطة بحالة العرض
     @Published var isSheetPresented: Bool = false
     @Published var navigateToInstantCard: Bool = false
-    @Published var isActive = true
+   
     // منطق عرض الـ sheet
     func toggleSheet() {
         isSheetPresented.toggle()
