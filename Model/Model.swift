@@ -11,12 +11,7 @@ struct model: Identifiable {
     var text: String = ""  // النص الذي سيُقرأ
     var categry: String = ""  // الفئة أو التصنيف
     let synthesizer = AVSpeechSynthesizer()  // أداة التحدث
-    
-  //  دالة للتحدث بالنص
- //   func speakText() {
-   //    let utterance = AVSpeechUtterance(string: text)
-   //   utterance.voice = AVSpeechSynthesisVoice(language: "ar-SA")        utterance.rate = 0.5
-       //synthesizer.speak(utterance)
+  
    }
 
 

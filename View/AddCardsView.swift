@@ -26,24 +26,29 @@ struct AddCardsView: View {
                         List {
                             ForEach(AddCardsViewModel.Cards) { entry in
                                 VStack(alignment: .leading) {
-                                    Text(entry.text)  // عرض النص
-                                    Text(entry.categry)
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                }
-                                .onTapGesture {
-                                    AddCardsViewModel.speakText()  // التحدث بالنص عند الضغط على العنصر
+                                    HStack {
+                                        Text(entry.text)  // عرض النص
+                                        Text(entry.categry)
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+
+                                        Spacer()
+
+                                        Button(action: {
+                                            speakText(entry.text) // تمرير النص الصحيح للدالة
+                                        }) {
+                                            Image(systemName: "speaker.wave.3.fill")
+                                                .resizable()
+                                                .frame(width: 25, height: 18)
+                                                .foregroundColor(Color("CustomOrange"))
+                                                .padding()
+                                        }
+                                    }
                                 }
                             }
                         }
                         .listStyle(PlainListStyle())
                     }
-                    
-//                    // إضافة الزر الدائري
-//                    CircularButton(iconName: "plus", action: {
-//                        AddCardsViewModel.toggleSheet() // وظيفة فتح الشاشة
-//                    })
-//                    .padding()  // إضافة المسافة حول الزر
                 }
                 .toolbar {
                     // الزر في يسار الـ NavigationBar
@@ -80,10 +85,21 @@ struct AddCardsView: View {
                 InstantCardView() // التوجه إلى الصفحة الأخرى عند الحاجة
             }
             .sheet(isPresented: $AddCardsViewModel.isSheetPresented) {
-                CreateCardView()  // عرض شاشة إضافة العناصر
+                CreateCardView(addCard: addCard)  // تمرير الدالة
                     .presentationDetents([.medium, .large])
                     .presentationDragIndicator(.visible)
             }
         }
+    }
+
+    // الدالة لإضافة البطاقة
+    private func addCard(text: String) {
+        AddCardsViewModel.Cards.append(model(text: text, categry: "Default"))
+    }
+
+    // دالة التحدث بالنص
+    private func speakText(_ text: String) {
+        // قم بتعريف الوظيفة التي تعالج النص لإخراجه كصوت
+        print("Speaking text: \(text)") // استبدل هذا بالكود الفعلي للتحدث
     }
 }
