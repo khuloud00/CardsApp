@@ -1,10 +1,14 @@
 import SwiftUI
+import AVFoundation
 
 struct InstantCardView: View {
     @StateObject private var InstantCardViewModel = Viewmodel()
     @State private var navigateToAddCardsView: Bool = false
     @State private var text: String = ""
     @State private var showSplash = true // للتحكم في عرض صفحة Splash
+    
+    // سرعة التحدث الثابتة التي تتحكم بها
+    private let speechRate: Float = 0.6
     
     var body: some View {
         NavigationStack {
@@ -66,18 +70,18 @@ struct InstantCardView: View {
                             VStack {
                                 TextField("Enter Text ...", text: $text, axis: .horizontal)
                                     .padding()
-                                    .font(.body)
+                                    .font(.system(size: 24, weight: .bold)) // تكبير الخط
                                     .foregroundColor(Color.black)
                                     .multilineTextAlignment(.trailing)
                                     .environment(\.layoutDirection, .rightToLeft)
                                     .frame(height: 150)
-                                
+                                    
                                 Spacer()
                                 
                                 HStack {
                                     Spacer()
                                     Button(action: {
-                                        InstantCardViewModel.speakText()
+                                        speakText(text) // استدعاء وظيفة التحدث
                                     }) {
                                         Image(systemName: "speaker.wave.3.fill")
                                             .resizable()
@@ -102,6 +106,30 @@ struct InstantCardView: View {
                 }
             }
         }
+    }
+    
+    // وظيفة التحدث بالنص
+    func speakText(_ text: String) {
+        guard !text.isEmpty else { return } // تأكد من أن النص غير فارغ
+        
+        // تحديد اللغة بناءً على النص
+        let language = containsArabicCharacters(text) ? "ar-SA" : "en-US"
+        
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = AVSpeechSynthesisVoice(language: language) // اللغة المختارة
+        utterance.rate = speechRate // استخدام السرعة التي تتحكم بها
+        let synthesizer = AVSpeechSynthesizer()
+        synthesizer.speak(utterance)
+    }
+    
+    // دالة لتحديد ما إذا كان النص يحتوي على أحرف عربية
+    func containsArabicCharacters(_ text: String) -> Bool {
+        for scalar in text.unicodeScalars {
+            if scalar.value >= 0x0600 && scalar.value <= 0x06FF { // نطاق الأحرف العربية
+                return true
+            }
+        }
+        return false
     }
 }
 
