@@ -144,4 +144,3 @@ struct InstantCardView_Previews: PreviewProvider {
             .environment(\.colorScheme, .light)
     }
 }
-

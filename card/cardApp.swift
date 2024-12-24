@@ -12,6 +12,7 @@ struct cardApp: App {
     var body: some Scene {
         WindowGroup {
             InstantCardView()
+                
         }
     }
 }

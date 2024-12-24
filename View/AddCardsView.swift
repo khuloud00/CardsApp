@@ -2,11 +2,13 @@ import SwiftUI
 import AVFAudio
 struct AddCardsView: View {
     @StateObject private var AddCardsViewModel = Viewmodel()
+    
     @State private var text: String = ""
     @State private var category: String = ""
     @State private var selectedCards: model? = nil
     @State private var isSheetPresented: Bool = false
     @State private var selectedCategory = "middle"
+    
 
     // وظيفة التحدث بالنص
     private func speakText(_ text: String) {
@@ -187,4 +189,3 @@ struct AddCardsView: View {
         AddCardsViewModel.Cards.append(model(text: text))
     }
 }
-

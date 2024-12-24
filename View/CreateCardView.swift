@@ -3,6 +3,7 @@ import AVFAudio
 struct CreateCardView: View {
     @StateObject private var CreateCardViewModel = Viewmodel()
     @Environment(\.dismiss) var dismiss
+    
     var addCard: (String) -> Void  // تمرير الدالة مباشرة
     @State private var selectedCategory = "middle"
 
@@ -115,4 +116,3 @@ struct CreateCardView: View {
         .background(Color.white.edgesIgnoringSafeArea(.all))
     }
 }
-

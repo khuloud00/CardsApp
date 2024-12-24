@@ -5,6 +5,8 @@
 //  Created by Asma Mohammed on 18/06/1446 AH.
 //
 import AVFAudio
+import SwiftUI
+
 
 struct model: Identifiable {
     var id = UUID()  // معرف فريد لكل عنصر

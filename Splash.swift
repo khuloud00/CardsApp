@@ -23,7 +23,7 @@ struct Splash: View {
                     .scaledToFit()
                 
                 // النص
-                Text("////////")
+                Text("")
                     .bold()
                     .font(.title)
                     .foregroundColor(.gray)
