@@ -63,6 +63,7 @@ struct ListCrds: View {
                             if let index = addCardsViewModel.Cards.firstIndex(where: { $0.id == entry.id }) {
                                 addCardsViewModel.deleteJCards(at: index)
                             }
+                            
                         }) {
                             Image(systemName: "trash")
                             Text("Delete")

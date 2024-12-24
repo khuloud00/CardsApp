@@ -29,6 +29,7 @@ class Viewmodel: ObservableObject {
 
     // بيانات الإدخال
     @Published var isActive = false
+    
     @Published var inputText: String = ""
     @State private var selectedCategory = "middle"
     

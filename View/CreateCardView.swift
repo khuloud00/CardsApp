@@ -39,6 +39,7 @@ struct CreateCardView: View {
                     .multilineTextAlignment(.leading)
                     .padding(.top, 10)
                 
+                
             }
             .padding(.horizontal, 16)
 

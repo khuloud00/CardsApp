@@ -78,7 +78,7 @@ struct AddCardsView: View {
                             ForEach(AddCardsViewModel.Cards) { entry in
                                 VStack(alignment: .leading) {
                                     HStack {
-                                        Text(entry.text)  // عرض النص
+                                        Text(entry.text)
                                         Text(entry.categry)
                                             .font(.subheadline)
                                             .foregroundColor(.gray)

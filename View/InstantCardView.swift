@@ -28,6 +28,7 @@ struct InstantCardView: View {
                 if InstantCardViewModel.isActive {
                     VStack {
                         Spacer()
+                        
                         Image("AppLogo")
                             .resizable()
                             .scaledToFit()
