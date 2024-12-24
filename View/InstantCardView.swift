@@ -13,6 +13,9 @@ struct InstantCardView: View {
     var body: some View {
         NavigationStack {
             if showSplash {
+                ZStack{
+                    LinearGradient(gradient: .init(colors: [.white,.background1 ]), startPoint: .center, endPoint: .bottom)
+                        .edgesIgnoringSafeArea(.all)
                 Splash()
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -21,6 +24,7 @@ struct InstantCardView: View {
                             }
                         }
                     }
+            }
             } else {
                 if InstantCardViewModel.isActive {
                     VStack {
@@ -68,10 +72,10 @@ struct InstantCardView: View {
                                 .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
                             
                             VStack {
-                                TextField("Enter Text ...", text: $text, axis: .horizontal)
+                                TextField("You want to say something?", text: $text, axis: .horizontal)
                                     .padding()
-                                    .font(.system(size: 24, weight: .bold)) // تكبير الخط
-                                    .foregroundColor(Color.black)
+                                    .font(.system(size: 24)) // تكبير الخط
+                                    .foregroundColor(.black)
                                     .multilineTextAlignment(.trailing)
                                     .environment(\.layoutDirection, .rightToLeft)
                                     .frame(height: 150)

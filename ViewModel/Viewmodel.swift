@@ -30,6 +30,7 @@ class Viewmodel: ObservableObject {
     // بيانات الإدخال
     @Published var isActive = false
     @Published var inputText: String = ""
+    @State private var selectedCategory = "middle"
     
     // الأزرار المحددة
     enum SelectedButton {
@@ -65,6 +66,9 @@ class Viewmodel: ObservableObject {
     // منطق التنقل إلى الصفحة الأخرى
     func navigateToInstantCardView() {
         navigateToInstantCard = true
+    }
+    func deleteJCards(at index: Int) {
+        Cards.remove(at: index)
     }
 
 }

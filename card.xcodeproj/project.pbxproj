@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		72025F092D1A15E6007FEFD2 /* ListCrds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72025F082D1A15E6007FEFD2 /* ListCrds.swift */; };
 		725B12272D14A118009341EE /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725B12262D14A10F009341EE /* Splash.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		46332A4D2D0F1B13001321D5 /* card.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = card.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		72025F082D1A15E6007FEFD2 /* ListCrds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCrds.swift; sourceTree = "<group>"; };
 		725B12262D14A10F009341EE /* Splash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -52,6 +54,7 @@
 		46332A442D0F1B13001321D5 = {
 			isa = PBXGroup;
 			children = (
+				72025F082D1A15E6007FEFD2 /* ListCrds.swift */,
 				725B12262D14A10F009341EE /* Splash.swift */,
 				725B11FC2D137571009341EE /* Model */,
 				725B11E42D13725D009341EE /* ViewModel */,
@@ -147,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				725B12272D14A118009341EE /* Splash.swift in Sources */,
+				72025F092D1A15E6007FEFD2 /* ListCrds.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +284,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"card/Preview Content\"";
-				DEVELOPMENT_TEAM = 2YM2WGWH5P;
+				DEVELOPMENT_TEAM = 2YQ7W9QJQZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -309,7 +313,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"card/Preview Content\"";
-				DEVELOPMENT_TEAM = 2YM2WGWH5P;
+				DEVELOPMENT_TEAM = 2YQ7W9QJQZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
