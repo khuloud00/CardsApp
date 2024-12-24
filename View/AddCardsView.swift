@@ -1,5 +1,5 @@
 import SwiftUI
-
+import AVFAudio
 struct AddCardsView: View {
     @StateObject private var AddCardsViewModel = Viewmodel()
     @State private var text: String = ""
@@ -7,7 +7,31 @@ struct AddCardsView: View {
     @State private var selectedCards: model? = nil
     @State private var isSheetPresented: Bool = false
     @State private var selectedCategory = "middle"
-    
+
+    // وظيفة التحدث بالنص
+    private func speakText(_ text: String) {
+        guard !text.isEmpty else { return } // تأكد من أن النص غير فارغ
+
+        // تحديد اللغة بناءً على النص
+        let language = containsArabicCharacters(text) ? "ar-SA" : "en-US"
+        
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = AVSpeechSynthesisVoice(language: language) // اللغة المختارة
+        utterance.rate = 0.5 // سرعة التحدث
+        let synthesizer = AVSpeechSynthesizer()
+        synthesizer.speak(utterance)
+    }
+
+    // دالة لتحديد ما إذا كان النص يحتوي على أحرف عربية
+    private func containsArabicCharacters(_ text: String) -> Bool {
+        for scalar in text.unicodeScalars {
+            if scalar.value >= 0x0600 && scalar.value <= 0x06FF { // نطاق الأحرف العربية
+                return true
+            }
+        }
+        return false
+    }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -32,7 +56,6 @@ struct AddCardsView: View {
                     } else {
                         // أزرار الكاتقوريز هنا
                         HStack(spacing: 30) {
-                            // الزر الأول
                             Button(action: {
                                 selectedCategory = "left"
                             }) {
@@ -44,8 +67,7 @@ struct AddCardsView: View {
                                     .cornerRadius(30)
                                     .shadow(radius: 2)
                             }
-                            
-                            // الزر الأوسط
+
                             Button(action: {
                                 selectedCategory = "middle"
                             }) {
@@ -57,8 +79,7 @@ struct AddCardsView: View {
                                     .cornerRadius(30)
                                     .shadow(radius: 2)
                             }
-                            
-                            // الزر الثالث
+
                             Button(action: {
                                 selectedCategory = "right"
                             }) {
@@ -72,7 +93,7 @@ struct AddCardsView: View {
                             }
                         }
                         .padding()
-                        
+
                         // قائمة العناصر
                         List {
                             ForEach(AddCardsViewModel.Cards) { entry in
@@ -86,7 +107,7 @@ struct AddCardsView: View {
                                         Spacer()
                                         
                                         Button(action: {
-                                            speakText(entry.text) // تمرير النص الصحيح للدالة
+                                            speakText(entry.text) // تشغيل الصوت عند الضغط على الزر
                                         }) {
                                             Image(systemName: "speaker.wave.3.fill")
                                                 .resizable()
@@ -96,7 +117,6 @@ struct AddCardsView: View {
                                         }
                                     }
                                 }
-                                
                                 .swipeActions(edge: .leading) {
                                     Button(action: {
                                         selectedCards = entry
@@ -117,17 +137,12 @@ struct AddCardsView: View {
                                         Text("Delete")
                                     }
                                 }
-                                
                             }
-                            
                         }
-                        .scrollContentBackground(.hidden) // إخفاء خلفية `List`
+                        .scrollContentBackground(.hidden) // إخفاء خلفية List
                     }
-                       
-                        
                 }
                 .toolbar {
-                    // الزر في يسار الـ NavigationBar
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
                             AddCardsViewModel.navigateToInstantCardView()
@@ -158,24 +173,18 @@ struct AddCardsView: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $AddCardsViewModel.navigateToInstantCard) {
-                InstantCardView() // التوجه إلى الصفحة الأخرى عند الحاجة
+                InstantCardView()
             }
             .sheet(isPresented: $AddCardsViewModel.isSheetPresented) {
-                CreateCardView(addCard: addCard)  // تمرير الدالة
+                CreateCardView(addCard: addCard)
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }
         }
     }
 
-    // الدالة لإضافة البطاقة
     private func addCard(text: String) {
-        AddCardsViewModel.Cards.append(model(text: text, categry: "Default"))
-    }
-
-    // دالة التحدث بالنص
-    private func speakText(_ text: String) {
-        // قم بتعريف الوظيفة التي تعالج النص لإخراجه كصوت
-        print("Speaking text: \(text)") // استبدل هذا بالكود الفعلي للتحدث
+        AddCardsViewModel.Cards.append(model(text: text))
     }
 }
+

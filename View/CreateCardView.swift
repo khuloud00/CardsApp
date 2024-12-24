@@ -1,10 +1,34 @@
 import SwiftUI
-
+import AVFAudio
 struct CreateCardView: View {
     @StateObject private var CreateCardViewModel = Viewmodel()
     @Environment(\.dismiss) var dismiss
     var addCard: (String) -> Void  // تمرير الدالة مباشرة
     @State private var selectedCategory = "middle"
+
+    // وظيفة التحدث بالنص
+    private func speakText(_ text: String) {
+        guard !text.isEmpty else { return } // تأكد من أن النص غير فارغ
+        
+        // تحديد اللغة بناءً على النص
+        let language = containsArabicCharacters(text) ? "ar-SA" : "en-US"
+        
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = AVSpeechSynthesisVoice(language: language) // اللغة المختارة
+        utterance.rate = 0.5 // سرعة التحدث
+        let synthesizer = AVSpeechSynthesizer()
+        synthesizer.speak(utterance)
+    }
+
+    // دالة لتحديد ما إذا كان النص يحتوي على أحرف عربية
+    private func containsArabicCharacters(_ text: String) -> Bool {
+        for scalar in text.unicodeScalars {
+            if scalar.value >= 0x0600 && scalar.value <= 0x06FF { // نطاق الأحرف العربية
+                return true
+            }
+        }
+        return false
+    }
 
     var body: some View {
         VStack {
@@ -34,18 +58,17 @@ struct CreateCardView: View {
                     .fill(Color.clear.opacity(0.1))
 
                 TextField("Typing...", text: $CreateCardViewModel.inputText)
+                    
+                    
                     .foregroundColor(.black1)
                     .padding(.horizontal, 20)
                     .multilineTextAlignment(.leading)
                     .padding(.top, 10)
-                
-                
             }
             .padding(.horizontal, 16)
 
             // حرك الأزرار تحت TextField ليكونوا فوق الكيبورد
             HStack(spacing: 30) {
-                // الزر الأول
                 Button(action: {
                     selectedCategory = "left"
                 }) {
@@ -56,10 +79,9 @@ struct CreateCardView: View {
                         .background(selectedCategory == "left" ? Color("CustomOrange") : Color.white)
                         .cornerRadius(30)
                         .shadow(radius: 2)
-                        .offset(y: -10) // Moves the element up by 10 points
+                        .offset(y: -10)
                 }
 
-                // الزر الأوسط
                 Button(action: {
                     selectedCategory = "middle"
                 }) {
@@ -70,10 +92,9 @@ struct CreateCardView: View {
                         .background(selectedCategory == "middle" ? Color("CustomOrange") : Color.white)
                         .cornerRadius(30)
                         .shadow(radius: 2)
-                        .offset(y: -10) // Moves the element up by 10 points
+                        .offset(y: -10)
                 }
 
-                // الزر الثالث
                 Button(action: {
                     selectedCategory = "right"
                 }) {
@@ -84,13 +105,14 @@ struct CreateCardView: View {
                         .background(selectedCategory == "right" ? Color("CustomOrange") : Color.white)
                         .cornerRadius(30)
                         .shadow(radius: 2)
-                        .offset(y: -10) // Moves the element up by 10 points
+                        .offset(y: -10)
                 }
             }
-            .padding(.bottom, 20) // هذا لإبعاد الأزرار عن الكيبورد في الأسفل
+            .padding(.bottom, 20)
             
             Spacer()
         }
         .background(Color.white.edgesIgnoringSafeArea(.all))
     }
 }
+

@@ -13,17 +13,16 @@ struct InstantCardView: View {
     var body: some View {
         NavigationStack {
             if showSplash {
-                ZStack{
-                  
-                Splash()
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                            withAnimation {
-                                showSplash = false
+                ZStack {
+                    Splash()
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                withAnimation {
+                                    showSplash = false
+                                }
                             }
                         }
-                    }
-            }
+                }
             } else {
                 if InstantCardViewModel.isActive {
                     VStack {
@@ -116,14 +115,16 @@ struct InstantCardView: View {
     func speakText(_ text: String) {
         guard !text.isEmpty else { return } // تأكد من أن النص غير فارغ
         
+        let synthesizer = AVSpeechSynthesizer()
+        
         // تحديد اللغة بناءً على النص
         let language = containsArabicCharacters(text) ? "ar-SA" : "en-US"
         
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: language) // اللغة المختارة
         utterance.rate = speechRate // استخدام السرعة التي تتحكم بها
-        let synthesizer = AVSpeechSynthesizer()
-        synthesizer.speak(utterance)
+        
+        synthesizer.speak(utterance) // تشغيل الصوت
     }
     
     // دالة لتحديد ما إذا كان النص يحتوي على أحرف عربية
@@ -143,3 +144,4 @@ struct InstantCardView_Previews: PreviewProvider {
             .environment(\.colorScheme, .light)
     }
 }
+
