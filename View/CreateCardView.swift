@@ -39,51 +39,54 @@ struct CreateCardView: View {
                     .multilineTextAlignment(.leading)
                     .padding(.top, 10)
                 
-                HStack(spacing: 30) {
-                    // الزر الأول
-                    Button(action: {
-                        selectedCategory = "left"
-                    }) {
-                        Image(systemName: "basket")
-                            .foregroundColor(selectedCategory == "left" ? .white : Color("CustomOrange"))
-                            .padding()
-                            .frame(width: 100, height: 38)
-                            .background(selectedCategory == "left" ? Color("CustomOrange") : Color.white)
-                            .cornerRadius(30)
-                            .shadow(radius: 2)
-                            .offset(y: -10) // Moves the element up by 10 points
-                    }
-
-                    // الزر الأوسط
-                    Button(action: {
-                        selectedCategory = "middle"
-                    }) {
-                        Image(systemName: "case")
-                            .foregroundColor(selectedCategory == "middle" ? .white : Color("CustomOrange"))
-                            .padding()
-                            .frame(width: 100, height: 38)
-                            .background(selectedCategory == "middle" ? Color("CustomOrange") : Color.white)
-                            .cornerRadius(30)
-                            .shadow(radius: 2)
-                            .offset(y: -10) // Moves the element up by 10 points
-                    }
-
-                    // الزر الثالث
-                    Button(action: {
-                        selectedCategory = "right"
-                    }) {
-                        Image(systemName: "tray")
-                            .foregroundColor(selectedCategory == "right" ? .white : Color("CustomOrange"))
-                            .padding()
-                            .frame(width: 100, height: 38)
-                            .background(selectedCategory == "right" ? Color("CustomOrange") : Color.white)
-                            .cornerRadius(30)
-                            .shadow(radius: 2)
-                            .offset(y: -10) // Moves the element up by 10 points
-                    }
-                }
             }
             .padding(.horizontal, 16)
+
+            // حرك الأزرار تحت TextField ليكونوا فوق الكيبورد
+            HStack(spacing: 30) {
+                // الزر الأول
+                Button(action: {
+                    selectedCategory = "left"
+                }) {
+                    Image(systemName: "basket")
+                        .foregroundColor(selectedCategory == "left" ? .white : Color("CustomOrange"))
+                        .padding()
+                        .frame(width: 100, height: 38)
+                        .background(selectedCategory == "left" ? Color("CustomOrange") : Color.white)
+                        .cornerRadius(30)
+                        .shadow(radius: 2)
+                        .offset(y: -10) // Moves the element up by 10 points
+                }
+
+                // الزر الأوسط
+                Button(action: {
+                    selectedCategory = "middle"
+                }) {
+                    Image(systemName: "case")
+                        .foregroundColor(selectedCategory == "middle" ? .white : Color("CustomOrange"))
+                        .padding()
+                        .frame(width: 100, height: 38)
+                        .background(selectedCategory == "middle" ? Color("CustomOrange") : Color.white)
+                        .cornerRadius(30)
+                        .shadow(radius: 2)
+                        .offset(y: -10) // Moves the element up by 10 points
+                }
+
+                // الزر الثالث
+                Button(action: {
+                    selectedCategory = "right"
+                }) {
+                    Image(systemName: "tray")
+                        .foregroundColor(selectedCategory == "right" ? .white : Color("CustomOrange"))
+                        .padding()
+                        .frame(width: 100, height: 38)
+                        .background(selectedCategory == "right" ? Color("CustomOrange") : Color.white)
+                        .cornerRadius(30)
+                        .shadow(radius: 2)
+                        .offset(y: -10) // Moves the element up by 10 points
+                }
+            }
+            .padding(.bottom, 20) // هذا لإبعاد الأزرار عن الكيبورد في الأسفل
             
             Spacer()
         }

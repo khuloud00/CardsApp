@@ -9,19 +9,29 @@ import SwiftUI
 
 struct Splash: View {
     var body: some View {
-        VStack {
-            Spacer()
-            Image("AppLogo")
-                .resizable()
-                .scaledToFit()
-            Text("Talkie Cards")
-                .font(.title)
-                .foregroundColor(.gray)
-                .padding(.top, 20)
-            Spacer()
+        ZStack {
+            // خلفية الأومبريه تحت كل شيء
+            LinearGradient(gradient: .init(colors: [.splashScreen, .background1]), startPoint: .center, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                Spacer()
+                
+                // الصورة
+                Image("AppLogo")
+                    .resizable()
+                    .scaledToFit()
+                
+                // النص
+                Text("Speak Your mind")
+                    .bold()
+                    .font(.title)
+                    .foregroundColor(.gray)
+                    .padding(.top, 20)
+                
+                Spacer()
+            }
         }
-        .background(Color.white)
-        .edgesIgnoringSafeArea(.all)
     }
 }
 

@@ -22,6 +22,7 @@ struct AddCardsView: View {
                             Image("LogoEmpty")
                                 .resizable()
                                 .scaledToFit()
+                                .frame(width: 250)
                             Text("Create Your Own Spoken Card")
                                 .font(.title)
                                 .foregroundColor(.customOrange)
@@ -161,7 +162,7 @@ struct AddCardsView: View {
             }
             .sheet(isPresented: $AddCardsViewModel.isSheetPresented) {
                 CreateCardView(addCard: addCard)  // تمرير الدالة
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }
         }

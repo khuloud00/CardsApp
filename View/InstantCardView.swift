@@ -8,17 +8,16 @@ struct InstantCardView: View {
     @State private var showSplash = true // للتحكم في عرض صفحة Splash
     
     // سرعة التحدث الثابتة التي تتحكم بها
-    private let speechRate: Float = 0.6
+    private let speechRate: Float = 0.5
     
     var body: some View {
         NavigationStack {
             if showSplash {
                 ZStack{
-                    LinearGradient(gradient: .init(colors: [.white,.background1 ]), startPoint: .center, endPoint: .bottom)
-                        .edgesIgnoringSafeArea(.all)
+                  
                 Splash()
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                             withAnimation {
                                 showSplash = false
                             }
