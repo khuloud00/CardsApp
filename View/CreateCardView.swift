@@ -61,7 +61,7 @@ struct CreateCardView: View {
                 TextField("Typing...", text: $CreateCardViewModel.inputText)
                     
                     
-                    .foregroundColor(.black1)
+                    .foregroundColor(.black)
                     .padding(.horizontal, 20)
                     .multilineTextAlignment(.leading)
                     .padding(.top, 10)

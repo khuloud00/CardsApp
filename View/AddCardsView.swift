@@ -49,10 +49,15 @@ struct AddCardsView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 250)
-                            Text("Create Your Own Spoken Card")
+                            Text("Create")
                                 .font(.title)
+                                .bold()
                                 .foregroundColor(.customOrange)
-                                .padding(.top, 20)
+                                .padding(.top, 10)
+                            Text("Your Own Cards")
+                                .foregroundColor(.black1)
+                                .font(.system(size: 24))
+                            
                             Spacer()
                         }
                     } else {

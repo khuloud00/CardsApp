@@ -74,7 +74,7 @@ struct InstantCardView: View {
                                 TextField("You want to say something?", text: $text, axis: .horizontal)
                                     .padding()
                                     .font(.system(size: 24)) // تكبير الخط
-                                    .foregroundColor(.black)
+                                    .foregroundColor(Color(.black))
                                     .multilineTextAlignment(.trailing)
                                     .environment(\.layoutDirection, .rightToLeft)
                                     .frame(height: 150)

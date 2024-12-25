@@ -21,6 +21,7 @@ struct Splash: View {
                 Image("AppLogo")
                     .resizable()
                     .scaledToFit()
+                    .frame(width: 370, height: 370)
                 
                 // النص
                 Text("")
