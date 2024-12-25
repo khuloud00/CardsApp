@@ -6,10 +6,11 @@ struct InstantCardView: View {
     @State private var navigateToAddCardsView: Bool = false
     @State private var text: String = ""
     @State private var showSplash = true // للتحكم في عرض صفحة Splash
-    
+
     // سرعة التحدث الثابتة التي تتحكم بها
     private let speechRate: Float = 0.5
-    
+    private let synthesizer = AVSpeechSynthesizer() // كائن المتحدث المستمر
+
     var body: some View {
         NavigationStack {
             if showSplash {
@@ -27,7 +28,7 @@ struct InstantCardView: View {
                 if InstantCardViewModel.isActive {
                     VStack {
                         Spacer()
-                        
+
                         Image("AppLogo")
                             .resizable()
                             .scaledToFit()
@@ -61,15 +62,15 @@ struct InstantCardView: View {
                             }
                         }
                         .padding(.top, 10)
-                        
+
                         Spacer()
                             .frame(height: 20)
-                        
+
                         ZStack {
                             RoundedRectangle(cornerRadius: 16)
                                 .fill(Color.white)
                                 .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
-                            
+
                             VStack {
                                 TextField("You want to say something?", text: $text, axis: .horizontal)
                                     .padding()
@@ -78,9 +79,9 @@ struct InstantCardView: View {
                                     .multilineTextAlignment(.trailing)
                                     .environment(\.layoutDirection, .rightToLeft)
                                     .frame(height: 150)
-                                    
+
                                 Spacer()
-                                
+
                                 HStack {
                                     Spacer()
                                     Button(action: {
@@ -98,7 +99,7 @@ struct InstantCardView: View {
                         }
                         .frame(height: 400)
                         .padding()
-                        
+
                         Spacer()
                     }
                     .background(Color("Background1"))
@@ -110,23 +111,26 @@ struct InstantCardView: View {
             }
         }
     }
-    
+
     // وظيفة التحدث بالنص
     func speakText(_ text: String) {
         guard !text.isEmpty else { return } // تأكد من أن النص غير فارغ
-        
-        let synthesizer = AVSpeechSynthesizer()
-        
+
+        // إذا كان هناك نص قيد التشغيل، قم بإيقافه
+        if synthesizer.isSpeaking {
+            synthesizer.stopSpeaking(at: .immediate)
+        }
+
         // تحديد اللغة بناءً على النص
         let language = containsArabicCharacters(text) ? "ar-SA" : "en-US"
-        
+
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: language) // اللغة المختارة
         utterance.rate = speechRate // استخدام السرعة التي تتحكم بها
-        
+
         synthesizer.speak(utterance) // تشغيل الصوت
     }
-    
+
     // دالة لتحديد ما إذا كان النص يحتوي على أحرف عربية
     func containsArabicCharacters(_ text: String) -> Bool {
         for scalar in text.unicodeScalars {
@@ -144,3 +148,4 @@ struct InstantCardView_Previews: PreviewProvider {
             .environment(\.colorScheme, .light)
     }
 }
+

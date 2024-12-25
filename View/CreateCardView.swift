@@ -3,22 +3,27 @@ import AVFAudio
 struct CreateCardView: View {
     @StateObject private var CreateCardViewModel = Viewmodel()
     @Environment(\.dismiss) var dismiss
-    
+
     var addCard: (String) -> Void  // تمرير الدالة مباشرة
     @State private var selectedCategory = "middle"
+    private let synthesizer = AVSpeechSynthesizer() // كائن المتحدث المستمر
 
     // وظيفة التحدث بالنص
     private func speakText(_ text: String) {
         guard !text.isEmpty else { return } // تأكد من أن النص غير فارغ
-        
+
+        // إذا كان هناك نص قيد التشغيل، قم بإيقافه
+        if synthesizer.isSpeaking {
+            synthesizer.stopSpeaking(at: .immediate)
+        }
+
         // تحديد اللغة بناءً على النص
         let language = containsArabicCharacters(text) ? "ar-SA" : "en-US"
-        
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: language) // اللغة المختارة
         utterance.rate = 0.5 // سرعة التحدث
-        let synthesizer = AVSpeechSynthesizer()
-        synthesizer.speak(utterance)
+
+        synthesizer.speak(utterance) // تشغيل الصوت
     }
 
     // دالة لتحديد ما إذا كان النص يحتوي على أحرف عربية
@@ -39,9 +44,9 @@ struct CreateCardView: View {
                 }
                 .foregroundColor(Color("CustomOrange"))
                 .font(.system(size: 18, weight: .semibold))
-                
+
                 Spacer()
-                
+
                 Button("Save") {
                     if !CreateCardViewModel.inputText.isEmpty {
                         addCard(CreateCardViewModel.inputText)  // استدعاء الدالة
@@ -59,8 +64,6 @@ struct CreateCardView: View {
                     .fill(Color.clear.opacity(0.1))
 
                 TextField("Typing...", text: $CreateCardViewModel.inputText)
-                    
-                    
                     .foregroundColor(.black)
                     .padding(.horizontal, 20)
                     .multilineTextAlignment(.leading)
@@ -68,7 +71,7 @@ struct CreateCardView: View {
             }
             .padding(.horizontal, 16)
 
-            // حرك الأزرار تحت TextField ليكونوا فوق الكيبورد
+            // أزرار الكاتقوريز هنا
             HStack(spacing: 30) {
                 Button(action: {
                     selectedCategory = "left"
@@ -80,7 +83,6 @@ struct CreateCardView: View {
                         .background(selectedCategory == "left" ? Color("CustomOrange") : Color.white)
                         .cornerRadius(30)
                         .shadow(radius: 2)
-                        .offset(y: -10)
                 }
 
                 Button(action: {
@@ -93,7 +95,6 @@ struct CreateCardView: View {
                         .background(selectedCategory == "middle" ? Color("CustomOrange") : Color.white)
                         .cornerRadius(30)
                         .shadow(radius: 2)
-                        .offset(y: -10)
                 }
 
                 Button(action: {
@@ -106,13 +107,13 @@ struct CreateCardView: View {
                         .background(selectedCategory == "right" ? Color("CustomOrange") : Color.white)
                         .cornerRadius(30)
                         .shadow(radius: 2)
-                        .offset(y: -10)
                 }
             }
             .padding(.bottom, 20)
-            
+
             Spacer()
         }
         .background(Color.white.edgesIgnoringSafeArea(.all))
     }
 }
+

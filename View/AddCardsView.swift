@@ -1,27 +1,33 @@
+
 import SwiftUI
 import AVFAudio
 struct AddCardsView: View {
     @StateObject private var AddCardsViewModel = Viewmodel()
-    
+
     @State private var text: String = ""
     @State private var category: String = ""
     @State private var selectedCards: model? = nil
     @State private var isSheetPresented: Bool = false
     @State private var selectedCategory = "middle"
-    
+    private let synthesizer = AVSpeechSynthesizer() // كائن المتحدث المستمر
 
     // وظيفة التحدث بالنص
     private func speakText(_ text: String) {
         guard !text.isEmpty else { return } // تأكد من أن النص غير فارغ
 
+        // إذا كان هناك نص قيد التشغيل، قم بإيقافه
+        if synthesizer.isSpeaking {
+            synthesizer.stopSpeaking(at: .immediate)
+        }
+
         // تحديد اللغة بناءً على النص
         let language = containsArabicCharacters(text) ? "ar-SA" : "en-US"
-        
+
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = AVSpeechSynthesisVoice(language: language) // اللغة المختارة
         utterance.rate = 0.5 // سرعة التحدث
-        let synthesizer = AVSpeechSynthesizer()
-        synthesizer.speak(utterance)
+
+        synthesizer.speak(utterance) // تشغيل الصوت
     }
 
     // دالة لتحديد ما إذا كان النص يحتوي على أحرف عربية
@@ -57,7 +63,7 @@ struct AddCardsView: View {
                             Text("Your Own Cards")
                                 .foregroundColor(.black1)
                                 .font(.system(size: 24))
-                            
+
                             Spacer()
                         }
                     } else {
@@ -110,9 +116,9 @@ struct AddCardsView: View {
                                         Text(entry.categry)
                                             .font(.subheadline)
                                             .foregroundColor(.gray)
-                                        
+
                                         Spacer()
-                                        
+
                                         Button(action: {
                                             speakText(entry.text) // تشغيل الصوت عند الضغط على الزر
                                         }) {
@@ -194,3 +200,4 @@ struct AddCardsView: View {
         AddCardsViewModel.Cards.append(model(text: text))
     }
 }
+
