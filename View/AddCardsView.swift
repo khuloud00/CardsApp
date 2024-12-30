@@ -1,54 +1,48 @@
-
 import SwiftUI
 import AVFAudio
-struct AddCardsView: View {
-    @StateObject private var AddCardsViewModel = Viewmodel()
+import SwiftData
 
+struct AddCardsView: View {
+    @StateObject var AddCardsViewModel = Viewmodel()
+    @Query var cards: [Card]
     @State private var text: String = ""
     @State private var category: String = ""
     @State private var selectedCards: model? = nil
     @State private var isSheetPresented: Bool = false
     @State private var selectedCategory = "middle"
-    private let synthesizer = AVSpeechSynthesizer() // كائن المتحدث المستمر
-
-    // وظيفة التحدث بالنص
+    private let synthesizer = AVSpeechSynthesizer()
+    
+    // Function to speak text
     private func speakText(_ text: String) {
-        guard !text.isEmpty else { return } // تأكد من أن النص غير فارغ
-
-        // إذا كان هناك نص قيد التشغيل، قم بإيقافه
+        guard !text.isEmpty else { return }
         if synthesizer.isSpeaking {
             synthesizer.stopSpeaking(at: .immediate)
         }
-
-        // تحديد اللغة بناءً على النص
         let language = containsArabicCharacters(text) ? "ar-SA" : "en-US"
-
         let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: language) // اللغة المختارة
-        utterance.rate = 0.5 // سرعة التحدث
-
-        synthesizer.speak(utterance) // تشغيل الصوت
+        utterance.voice = AVSpeechSynthesisVoice(language: language)
+        utterance.rate = 0.5
+        synthesizer.speak(utterance)
     }
-
-    // دالة لتحديد ما إذا كان النص يحتوي على أحرف عربية
+    
+    // Function to check if text contains Arabic characters
     private func containsArabicCharacters(_ text: String) -> Bool {
         for scalar in text.unicodeScalars {
-            if scalar.value >= 0x0600 && scalar.value <= 0x06FF { // نطاق الأحرف العربية
+            if scalar.value >= 0x0600 && scalar.value <= 0x06FF {
                 return true
             }
         }
         return false
     }
-
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(.background1)
                     .edgesIgnoringSafeArea(.all)
-
+                
                 VStack {
                     if AddCardsViewModel.Cards.isEmpty {
-                        // حالة الصفحة الفارغة
                         VStack {
                             Spacer()
                             Image("LogoEmpty")
@@ -63,64 +57,26 @@ struct AddCardsView: View {
                             Text("Your Own Cards")
                                 .foregroundColor(.black1)
                                 .font(.system(size: 24))
-
                             Spacer()
                         }
                     } else {
-                        // أزرار الكاتقوريز هنا
                         HStack(spacing: 30) {
-                            Button(action: {
-                                selectedCategory = "left"
-                            }) {
-                                Image(systemName: "basket")
-                                    .foregroundColor(selectedCategory == "left" ? .white : Color("CustomOrange"))
-                                    .padding()
-                                    .frame(width: 100, height: 38)
-                                    .background(selectedCategory == "left" ? Color("CustomOrange") : Color.white)
-                                    .cornerRadius(30)
-                                    .shadow(radius: 2)
-                            }
-
-                            Button(action: {
-                                selectedCategory = "middle"
-                            }) {
-                                Image(systemName: "case")
-                                    .foregroundColor(selectedCategory == "middle" ? .white : Color("CustomOrange"))
-                                    .padding()
-                                    .frame(width: 100, height: 38)
-                                    .background(selectedCategory == "middle" ? Color("CustomOrange") : Color.white)
-                                    .cornerRadius(30)
-                                    .shadow(radius: 2)
-                            }
-
-                            Button(action: {
-                                selectedCategory = "right"
-                            }) {
-                                Image(systemName: "tray")
-                                    .foregroundColor(selectedCategory == "right" ? .white : Color("CustomOrange"))
-                                    .padding()
-                                    .frame(width: 100, height: 38)
-                                    .background(selectedCategory == "right" ? Color("CustomOrange") : Color.white)
-                                    .cornerRadius(30)
-                                    .shadow(radius: 2)
-                            }
+                            categoryButton(category: "left", systemImage: "basket")
+                            categoryButton(category: "middle", systemImage: "star.fill")
+                            categoryButton(category: "right", systemImage: "tray")
                         }
-                        .padding()
-
-                        // قائمة العناصر
+                        
                         List {
-                            ForEach(AddCardsViewModel.Cards) { entry in
+                            ForEach(AddCardsViewModel.Cards.filter { $0.categry == selectedCategory }) { entry in
                                 VStack(alignment: .leading) {
                                     HStack {
                                         Text(entry.text)
                                         Text(entry.categry)
                                             .font(.subheadline)
                                             .foregroundColor(.gray)
-
                                         Spacer()
-
                                         Button(action: {
-                                            speakText(entry.text) // تشغيل الصوت عند الضغط على الزر
+                                            speakText(entry.text)
                                         }) {
                                             Image(systemName: "speaker.wave.3.fill")
                                                 .resizable()
@@ -152,7 +108,7 @@ struct AddCardsView: View {
                                 }
                             }
                         }
-                        .scrollContentBackground(.hidden) // إخفاء خلفية List
+                        .scrollContentBackground(.hidden)
                     }
                 }
                 .toolbar {
@@ -165,14 +121,12 @@ struct AddCardsView: View {
                                 .foregroundColor(Color("CustomOrange"))
                         }
                     }
-
                     ToolbarItem(placement: .principal) {
                         Text("Add cards")
                             .font(.system(size: 36))
                             .fontWeight(.bold)
                             .foregroundColor(Color.black)
                     }
-
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             AddCardsViewModel.toggleSheet()
@@ -195,9 +149,23 @@ struct AddCardsView: View {
             }
         }
     }
-
-    private func addCard(text: String) {
-        AddCardsViewModel.Cards.append(model(text: text))
+    
+    // Helper function to create category buttons
+    private func categoryButton(category: String, systemImage: String) -> some View {
+        Button(action: {
+            selectedCategory = category
+        }) {
+            Image(systemName: systemImage)
+                .foregroundColor(selectedCategory == category ? .white : Color("CustomOrange"))
+                .padding()
+                .frame(width: 100, height: 38)
+                .background(selectedCategory == category ? Color("CustomOrange") : Color.white)
+                .cornerRadius(30)
+                .shadow(radius: 2)
+        }
+    }
+    
+    private func addCard(text: String, category: String) {
+        AddCardsViewModel.Cards.append(model(text: text, categry: category))
     }
 }
-

@@ -3,8 +3,8 @@ import AVFAudio
 struct CreateCardView: View {
     @StateObject private var CreateCardViewModel = Viewmodel()
     @Environment(\.dismiss) var dismiss
-
-    var addCard: (String) -> Void  // تمرير الدالة مباشرة
+    @Environment(\.modelContext) private var modelContext
+    var addCard: (String, String) -> Void  // تمرير الدالة مباشرة
     @State private var selectedCategory = "middle"
     private let synthesizer = AVSpeechSynthesizer() // كائن المتحدث المستمر
 
@@ -49,7 +49,7 @@ struct CreateCardView: View {
 
                 Button("Save") {
                     if !CreateCardViewModel.inputText.isEmpty {
-                        addCard(CreateCardViewModel.inputText)  // استدعاء الدالة
+                        addCard(CreateCardViewModel.inputText, selectedCategory)  // استدعاء الدالة
                         dismiss()
                     }
                 }
@@ -88,7 +88,7 @@ struct CreateCardView: View {
                 Button(action: {
                     selectedCategory = "middle"
                 }) {
-                    Image(systemName: "case")
+                    Image(systemName: "star.fill")
                         .foregroundColor(selectedCategory == "middle" ? .white : Color("CustomOrange"))
                         .padding()
                         .frame(width: 100, height: 38)
