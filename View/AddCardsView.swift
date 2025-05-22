@@ -7,12 +7,11 @@ struct AddCardsView: View {
     @Query var cards: [Card]
     @State private var text: String = ""
     @State private var category: String = ""
-    @State private var selectedCards: model? = nil
     @State private var isSheetPresented: Bool = false
     @State private var selectedCategory = "middle"
     private let synthesizer = AVSpeechSynthesizer()
-    
-    // Function to speak text
+    @Environment(\.modelContext) var modelContext
+
     private func speakText(_ text: String) {
         guard !text.isEmpty else { return }
         if synthesizer.isSpeaking {
@@ -24,8 +23,7 @@ struct AddCardsView: View {
         utterance.rate = 0.5
         synthesizer.speak(utterance)
     }
-    
-    // Function to check if text contains Arabic characters
+
     private func containsArabicCharacters(_ text: String) -> Bool {
         for scalar in text.unicodeScalars {
             if scalar.value >= 0x0600 && scalar.value <= 0x06FF {
@@ -34,50 +32,48 @@ struct AddCardsView: View {
         }
         return false
     }
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(.background1)
                     .edgesIgnoringSafeArea(.all)
-                
+
                 VStack {
-                    if AddCardsViewModel.Cards.isEmpty {
-                        VStack {
-                            Spacer()
-                            Image("LogoEmpty")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 250)
-                            Text("Create")
-                                .font(.title)
-                                .bold()
-                                .foregroundColor(.customOrange)
-                                .padding(.top, 10)
-                            Text("Your Own Cards")
-                                .foregroundColor(.black1)
-                                .font(.system(size: 24))
-                            Spacer()
-                        }
+                    if cards.isEmpty {
+                        Spacer()
+                        Image("LogoEmpty")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 250)
+                        Text("Create")
+                            .font(.title)
+                            .bold()
+                            .foregroundColor(.customOrange)
+                            .padding(.top, 10)
+                        Text("Your Own Cards")
+                            .foregroundColor(.black1)
+                            .font(.system(size: 24))
+                        Spacer()
                     } else {
                         HStack(spacing: 30) {
                             categoryButton(category: "left", systemImage: "basket")
                             categoryButton(category: "middle", systemImage: "star.fill")
                             categoryButton(category: "right", systemImage: "tray")
                         }
-                        
+
                         List {
-                            ForEach(AddCardsViewModel.Cards.filter { $0.categry == selectedCategory }) { entry in
+                            ForEach(cards.filter { $0.category == selectedCategory }) { entry in
                                 VStack(alignment: .leading) {
                                     HStack {
                                         Text(entry.text)
-                                        Text(entry.categry)
+                                        Text(entry.category)
                                             .font(.subheadline)
                                             .foregroundColor(.gray)
                                         Spacer()
-                                        Button(action: {
+                                        Button {
                                             speakText(entry.text)
-                                        }) {
+                                        } label: {
                                             Image(systemName: "speaker.wave.3.fill")
                                                 .resizable()
                                                 .frame(width: 25, height: 18)
@@ -86,24 +82,11 @@ struct AddCardsView: View {
                                         }
                                     }
                                 }
-                                .swipeActions(edge: .leading) {
-                                    Button(action: {
-                                        selectedCards = entry
-                                        isSheetPresented = true
-                                    }) {
-                                        Image(systemName: "pencil")
-                                        Text("Edit")
-                                    }
-                                    .tint(.blue)
-                                }
                                 .swipeActions(edge: .trailing) {
-                                    Button(role: .destructive, action: {
-                                        if let index = AddCardsViewModel.Cards.firstIndex(where: { $0.id == entry.id }) {
-                                            AddCardsViewModel.deleteJCards(at: index)
-                                        }
-                                    }) {
-                                        Image(systemName: "trash")
-                                        Text("Delete")
+                                    Button(role: .destructive) {
+                                        modelContext.delete(entry)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
                                     }
                                 }
                             }
@@ -111,30 +94,27 @@ struct AddCardsView: View {
                         .scrollContentBackground(.hidden)
                     }
                 }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: {
-                            AddCardsViewModel.navigateToInstantCardView()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 22))
-                                .foregroundColor(Color("CustomOrange"))
-                        }
+            }
+            .navigationTitle("Add cards")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        AddCardsViewModel.navigateToInstantCardView()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 22))
+                            .foregroundColor(Color("CustomOrange"))
                     }
-                    ToolbarItem(placement: .principal) {
-                        Text("Add cards")
-                            .font(.system(size: 36))
-                            .fontWeight(.bold)
-                            .foregroundColor(Color.black)
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            AddCardsViewModel.toggleSheet()
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 22))
-                                .foregroundColor(Color("CustomOrange"))
-                        }
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isSheetPresented = true
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.system(size: 22))
+                            .foregroundColor(Color("CustomOrange"))
                     }
                 }
             }
@@ -142,19 +122,18 @@ struct AddCardsView: View {
             .navigationDestination(isPresented: $AddCardsViewModel.navigateToInstantCard) {
                 InstantCardView()
             }
-            .sheet(isPresented: $AddCardsViewModel.isSheetPresented) {
-                CreateCardView(addCard: addCard)
+            .sheet(isPresented: $isSheetPresented) {
+                CreateCardView()
                     .presentationDetents([.large])
                     .presentationDragIndicator(.visible)
             }
         }
     }
-    
-    // Helper function to create category buttons
+
     private func categoryButton(category: String, systemImage: String) -> some View {
-        Button(action: {
+        Button {
             selectedCategory = category
-        }) {
+        } label: {
             Image(systemName: systemImage)
                 .foregroundColor(selectedCategory == category ? .white : Color("CustomOrange"))
                 .padding()
@@ -163,9 +142,5 @@ struct AddCardsView: View {
                 .cornerRadius(30)
                 .shadow(radius: 2)
         }
-    }
-    
-    private func addCard(text: String, category: String) {
-        AddCardsViewModel.Cards.append(model(text: text, categry: category))
     }
 }

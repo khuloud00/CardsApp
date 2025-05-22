@@ -4,8 +4,8 @@ struct CreateCardView: View {
     @StateObject private var CreateCardViewModel = Viewmodel()
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
-    var addCard: (String, String) -> Void  // تمرير الدالة مباشرة
-    @State private var selectedCategory = "middle"
+//    var addCard: (String, String) -> Void  // تمرير الدالة مباشرة
+    @State private var selectedCategory = "  "
     private let synthesizer = AVSpeechSynthesizer() // كائن المتحدث المستمر
 
     // وظيفة التحدث بالنص
@@ -49,10 +49,12 @@ struct CreateCardView: View {
 
                 Button("Save") {
                     if !CreateCardViewModel.inputText.isEmpty {
-                        addCard(CreateCardViewModel.inputText, selectedCategory)  // استدعاء الدالة
+                        let newCard = Card(text: CreateCardViewModel.inputText, category: selectedCategory)
+                        modelContext.insert(newCard)  // ✅ Save directly to SwiftData
                         dismiss()
                     }
                 }
+
                 .foregroundColor(Color("CustomOrange"))
                 .font(.system(size: 18, weight: .semibold))
             }
